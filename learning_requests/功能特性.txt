@@ -1,5 +1,5 @@
-
 一、功能特性
+
 1、Keep-Alive & 连接池
 2、国际化域名和 URL
 3、带持久Cookie的会话
@@ -56,3 +56,24 @@ res.content  bytes型，即二进制的数据
 res.encoding
 
 4、json响应内容
+
+5、原始响应内容
+设置stream=True，获取来自服务器的套接字响应
+以流下载的方式，将文件保存到文件
+with open(filename, 'wb') as fd:
+    for chunk in r.iter_content(chunk_size):
+        fd.write(chunk)
+
+6、定制请求头
+url = 'https://api.github.com/some/endpoint'
+headers = {'user-agent': 'my-app/0.0.1'}
+r = requests.get(url, headers=headers)
+注意: 1、定制 header 的优先级低于某些特定的信息源
+         auth= 参数 .netrc headers
+	  2、所有的header值必须是string、bytestring或者unicode
+	  
+7、更加复杂的POST请求
+url = 'https://api.github.com/some/endpoint'
+payload = {'some': 'data'}
+r = requests.post(url, json=payload)
+r = requests.post(url,data = json.dumps(payload))
