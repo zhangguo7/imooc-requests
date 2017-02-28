@@ -1,8 +1,36 @@
-会话对象
 
-请求与响应对象
+1、会话对象
+能够完成跨请求保持参数
+在同一个Session实例发出时保持cookie
+s = requests.Session()
+s.get('http://httpbin.org/cookies/set/sessioncookie/123456789')
+res = s.get('http://httpbin.org/cookies')
+print(r.text)
 
-准备的请求 （Prepared Request）
+2、请求与响应对象
+通过为会话对象的属性
+提供数据来实现为请求方法传递缺省数据
+s = requests.Session()
+s.auth = ('user','pass')
+
+传递给请求方法的字典都会与已设置会话层数据合并
+s.headers.update({'x-test':'true'})
+s.get('http://httpbin.org/headers',headers = {'x-test2':'true'})
+'x-test','x-test2'都将被发送
+
+s = requests.Session()
+res = s.get('http://httpbin.org/cookies',cookies={'from-my': 'browser'})
+#'{"cookies": {"from-my": "browser"}}'
+res = s.get('http://httpbin.org/cookies')
+# '{"cookies": {}}'
+方法级别的参数不能跨请求保持
+
+会话可以用作前后文管理器
+确保 with 区块退出后会话能被关闭
+with requests.Session() as s:
+	s.get('http://httpbin.org/cookies/set/sessioncookie/123456789')
+
+3、准备的请求 （Prepared Request）
 
 SSL 证书验证
 
